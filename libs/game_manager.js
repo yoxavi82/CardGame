@@ -171,6 +171,7 @@ function playCard(socket, index) {
 	if (match) {
 		var player = match.players[match.players[0].socket.id === socket.id ? 0 : 1];
 		if (!player.cur) {
+			console.log(index)
 			if (index >= 0 && index <= 4) {
 				if (player.cards[index] !== undefined) {
 					player.cur = player.cards[index];
