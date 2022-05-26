@@ -9,6 +9,7 @@
     "debug": "node --inspect server.js"
   },
   "dependencies": {
+    "body-parser": "^1.20.0",
     "express": "~4.13.1",
     "express-session": "^1.17.3",
     "mysql": "^2.18.1",

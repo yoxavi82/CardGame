@@ -2,34 +2,11 @@
 // and the Socket.io server, used to handle the the realtime connection to the client.
 
 var express = require("express");
+var router = express.Router();
 var mysql = require("mysql");
 
-var connection = mysql.createConnection({
-	host: "37.59.55.185",
-	user: "7atd0OBZX2",
-	password: "lkxIEchd6U",
-	database: "7atd0OBZX2"
-});
+var bodyParser = require('body-parser');
 
-connection.connect(function (err) {
-	if (err) {
-		console.error('Error connecting: ' + err.stack);
-		return;
-	}
-
-	console.log('Connected as id ' + connection.threadId);
-});
-
-connection.query('SELECT * FROM Users', function (error, results, fields) {
-	if (error)
-		throw error;
-
-	results.forEach(result => {
-		console.log(result);
-	});
-});
-
-connection.end();
 
 
 var app = express();
@@ -53,3 +30,94 @@ app.get("*", function (req, res) {
 http.listen(app.get("port"), function () {
 	console.log("Node app started on port %s", app.get("port"));
 });
+
+
+var register = require('./routes/connection');
+
+app.use('/', register);
+
+
+/*
+//SQL
+
+var connection = mysql.createConnection({
+	host: "37.59.55.185",
+	user: "7atd0OBZX2",
+	password: "lkxIEchd6U",
+	database: "7atd0OBZX2"
+});
+connection.connect(function(err){
+if(!err) {
+    console.log("Database is connected ... nn");
+} else {
+    console.log("Error connecting database ... nn");
+}
+});
+router.get('/register', function(req, res) {
+	res.render('index');
+  });
+
+//************************************************************************
+//************************************************************************
+router.post('/register',function(req,res){
+  console.log("req",req.body);
+  var users={
+    "username":req.body.username,
+    "password":req.body.password,
+    "email":req.body.email
+  };
+  connection.query('INSERT INTO Users SET ?',users, function (error, results, fields) {
+  if (error) {
+    console.log("error ocurred",error);
+    res.send({
+      "code":400,
+      "failed":"error ocurred"
+    });
+  }else{
+    console.log('The solution is: ', results);
+    res.send({
+      "code":200,
+      "success":"user registered sucessfully"
+        });
+  }
+  });
+});
+
+
+
+router.post('/login',function(req,res){
+
+  var email= req.body.email;
+  var password = req.body.password;
+  connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
+  if (error) {
+    // console.log("error ocurred",error);
+    res.send({
+      "code":400,
+      "failed":"error ocurred"
+    });
+  }else{
+    // console.log('The solution is: ', results);
+    if(results.length >0){
+      if(results[0].password == password){
+        res.send({
+          "code":200,
+          "success":"login sucessfull"
+            });
+      }
+      else{
+        res.send({
+          "code":204,
+          "success":"Email and password does not match"
+            });
+      }
+    }
+    else{
+      res.send({
+        "code":204,
+        "success":"Email does not exits"
+          });
+    }
+  }
+  });
+});*/
