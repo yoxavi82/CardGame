@@ -7,6 +7,10 @@ canvas {
 .play-guide {
 	margin: 5%;
 }
+.header{
+    border: 2px solid red;
+    height:10%;
+}
 
 @font-face {
     font-family: "ChineseTakeaway";
