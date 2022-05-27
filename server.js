@@ -5,9 +5,6 @@ var express = require("express");
 var router = express.Router();
 var mysql = require("mysql");
 
-var bodyParser = require('body-parser');
-
-
 
 var app = express();
 var http = require("http").Server(app);
@@ -33,6 +30,10 @@ http.listen(app.get("port"), function () {
 
 
 var register = require('./routes/connection');
+
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use('/', register);
 
