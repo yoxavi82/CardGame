@@ -5,11 +5,6 @@ var mysql      = require('mysql');
 
 var bodyParser = require('body-parser');
 
-// create application/json parser
-var jsonParser = bodyParser.json()
- 
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var connection = mysql.createConnection({
 	host: "37.59.55.185",
@@ -20,12 +15,11 @@ var connection = mysql.createConnection({
 connection.connect(function(err){
 if(!err) {
     console.log("Database is connected ... nn");
+
 } else {
     console.log("Error connecting database ... nn");
 }
 });
-
-var app = express();
 
 //************************************************************************
 //************************************************************************
@@ -34,7 +28,8 @@ router.post('/register',function(req,res){
   var users={
     "username":req.body.username,
     "password":req.body.password,
-    "email":req.body.email
+    "email":req.body.email,
+    "wins":0
   };
   connection.query('INSERT INTO Users SET ?',users, function (error, results, fields) {
   if (error) {
