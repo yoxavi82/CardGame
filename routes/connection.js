@@ -80,17 +80,5 @@ router.post('/login', function(req, response) {
 	}
 });
 
-// http://localhost:3000/game
-router.get('/game.html', function(req, response) {
-	// If the user is loggedin
-	if (req.session.loggedin) {
-		// Output username
-		response.send('Welcome back, ' + req.session.username + '!');
-	} else {
-		// Not logged in
-		response.send('Please login to view this page!');
-	}
-	response.end();
-});
 
 module.exports = router;
