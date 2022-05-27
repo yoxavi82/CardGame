@@ -4,6 +4,8 @@
 var express = require("express");
 var router = express.Router();
 var mysql = require("mysql");
+const session = require('express-session');
+var path = require('path');
 
 
 var app = express();
@@ -33,7 +35,15 @@ var register = require('./routes/connection');
 
 const bodyParser = require('body-parser')
 
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, 'static')));
+
 
 app.use('/', register);
 

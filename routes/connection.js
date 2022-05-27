@@ -4,6 +4,7 @@ var mysql      = require('mysql');
 var mysql      = require('mysql');
 
 var bodyParser = require('body-parser');
+const { route } = require('express/lib/application');
 
 
 var connection = mysql.createConnection({
@@ -50,41 +51,46 @@ router.post('/register',function(req,res){
 
 
 
-router.post('/login',function(req,res){
+// http://localhost:3000/auth
+router.post('/login', function(req, response) {
+	// Capture the input fields
+	let username = req.body.username;
+	let password = req.body.password;
+	// Ensure the input fields exists and are not empty
+	if (username && password) {
+		// Execute SQL query that'll select the account from the database based on the specified username and password
+		connection.query('SELECT * FROM Users WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+			// If there is an issue with the query, output the error
+			if (error) throw error;
+			// If the account exists
+			if (results.length > 0) {
+				// Authenticate the user
+				req.session.loggedin = true;
+				req.session.username = username;
+				// Redirect to home page
+				response.redirect('/game.html');
+			} else {
+				response.send('Incorrect Username and/or Password!');
+			}			
+			response.end();
+		});
+	} else {
+		response.send('Please enter Username and Password!');
+		response.end();
+	}
+});
 
-  var email= req.body.email;
-  var password = req.body.password;
-  connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
-  if (error) {
-    // console.log("error ocurred",error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    });
-  }else{
-    // console.log('The solution is: ', results);
-    if(results.length >0){
-      if(results[0].password == password){
-        res.send({
-          "code":200,
-          "success":"login sucessfull"
-            });
-      }
-      else{
-        res.send({
-          "code":204,
-          "success":"Email and password does not match"
-            });
-      }
-    }
-    else{
-      res.send({
-        "code":204,
-        "success":"Email does not exits"
-          });
-    }
-  }
-  });
+// http://localhost:3000/game
+router.get('/game.html', function(req, response) {
+	// If the user is loggedin
+	if (req.session.loggedin) {
+		// Output username
+		response.send('Welcome back, ' + req.session.username + '!');
+	} else {
+		// Not logged in
+		response.send('Please login to view this page!');
+	}
+	response.end();
 });
 
 module.exports = router;
