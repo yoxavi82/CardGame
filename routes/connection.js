@@ -8,18 +8,11 @@ const { route } = require('express/lib/application');
 const { response } = require('express');
 
 
-var connection = mysql.createConnection({
+var connection = mysql.createPool({
 	host: "37.59.55.185",
 	user: "7atd0OBZX2",
 	password: "lkxIEchd6U",
 	database: "7atd0OBZX2"
-});
-connection.connect(function(err){
-if(!err) {
-    console.log("Database is connected ... nn");
-} else {
-    console.log("Error connecting database ... nn");
-}
 });
 
 //************************************************************************
