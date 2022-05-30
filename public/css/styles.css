@@ -34,3 +34,6 @@ footer{
     font-family: "PokemonSolid";
     src: url("../fonts/PokemonSolid.ttf");
 }
+navbar{
+    background-color: bl;
+}

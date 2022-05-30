@@ -18,16 +18,14 @@
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <nav class="header navbar navbar-dark bg-dark navbar-expand-sm px-5">
-        <a class="navbar-brand" href="#">
-            <img src="./images/pokemonlogo.png" width="150" height="65" alt="logo">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-11"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbar-list-11">
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="modal" data-target="#at-login">Login</a>
@@ -38,7 +36,7 @@
             </ul>
         </div>
     </nav>
-    <div class="main container py-5">
+    <div class="container">
         <div class="row h-100 align-items-center py-5">
             <div class="col-lg-6">
                 <h1 class="display-4">Pokémon Card Game</h1>
@@ -53,11 +51,10 @@
             <div class="col-lg-6 d-none d-lg-block"><img src="./images/Cartas.png" id="imagencartas" class="img-fluid">
             </div>
         </div>
+        <footer class="bg-light h-10 text-center mt-auto">
+            <p class="font-italic text-muted mb-0">&copy; Copyrights Company.com All rights reserved.</p>
+        </footer>
     </div>
-
-    <footer class="bg-light h-10 text-center">
-        <p class="font-italic text-muted mb-0">&copy; Copyrights Company.com All rights reserved.</p>
-    </footer>
 
     <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\ Modal Login /////////////////////////////////////-->
     <div class="modal fade" id="at-login" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -128,7 +125,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <input type="submit" id="registerbutton" class="btn btn-primary">Register</input>
+                        <input type="submit" id="registerbutton" class="btn btn-primary"></input>
                     </div>
                 </form>
             </div>
