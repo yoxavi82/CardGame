@@ -5,6 +5,7 @@ var mysql      = require('mysql');
 
 var bodyParser = require('body-parser');
 const { route } = require('express/lib/application');
+const { response } = require('express');
 
 
 var connection = mysql.createConnection({
@@ -16,7 +17,6 @@ var connection = mysql.createConnection({
 connection.connect(function(err){
 if(!err) {
     console.log("Database is connected ... nn");
-
 } else {
     console.log("Error connecting database ... nn");
 }
