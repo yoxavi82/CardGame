@@ -44,6 +44,10 @@ module.exports.listen = function (app) {
 		socket.on("enter queue", function () {
 			enterQueue(socket);
 		});
+		socket.on("new msg", function (text) {
+			newMessage(socket,text);
+			console.log("llega1");
+		});
 
 		socket.on("leave queue", function () {
 			leaveQueue(socket);
@@ -97,6 +101,14 @@ function enterQueue(socket) {
 			createMatch([queue.shift(), queue.shift()]);
 		}
 	}
+}
+
+function newMessage(socket,text){
+	var player = findPlayerById(socket.id);
+	var match = findMatchBySocketId(socket.id);
+	var opponent = match.players[match.players[0].socket.id !== socket.id ? 0 : 1];
+
+	opponent.socket.emit("opponent msg", "<span style='color:red;'>Opponent:</span> "+text)
 }
 
 function leaveQueue(socket) {
