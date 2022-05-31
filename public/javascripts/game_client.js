@@ -24,6 +24,9 @@ socket.on("update cards", function(cards) {
 socket.on("unknown card played", function() {
 	unknownCardPlayed();
 });
+socket.on("opponent msg", function(text) {
+	opponentMsg(text);
+});
 
 socket.on("fight result", function(result) {
 	displayResult(result);
@@ -75,6 +78,11 @@ function enterMatch() {
 	resetDots(labels["searching"]);
 	labels["logo"].visible = false;
 	displayCardSlots = true;
+	document.getElementById("send").disabled= false;
+	document.getElementById("emojiSelecter").disabled=false;
+	document.getElementById("send").value= "";
+
+
 }
 
 function updateCards(cards) {
@@ -93,6 +101,12 @@ function playCard(index) {
 
 function unknownCardPlayed() {
 	opponentCard = {isUnknown: true};
+}
+
+function opponentMsg(text){
+	document.getElementById("msgHistory").innerHTML+="<li>"+text+"</li>";
+	document.getElementById("msg").scrollTo(0, document.body.scrollHeight);
+
 }
 
 function displayResult(result) {
@@ -163,6 +177,13 @@ function endMatch() {
 	clearInterval(timerInterval);
 	matchWinner = undefined;
 	matchEndReason = undefined;
+
+	document.getElementById("send").disabled= true;
+	document.getElementById("emojiSelecter").disabled=true;
+	document.getElementById("drawer").classList.add("hidden");
+	document.getElementById("send").value= "To start chatting join a game";
+
+
 }
 
 function exitMatch() {
@@ -215,3 +236,47 @@ function updateTimer() {
 		clearInterval(timerInterval);
 	}
 }
+
+window.onload = function () {
+	document.getElementById("send").disabled= true;
+	document.getElementById("send").value= "To start chatting join a game";
+	document.getElementById("drawer").classList.add("hidden");
+	document.getElementById("send").addEventListener("keypress",function(event){
+		if (event.key === "Enter") {
+			// Cancel the default action, if needed
+			event.preventDefault();
+			// Trigger the button element with a click
+			console.log(this.value);
+			document.getElementById("msgHistory").innerHTML+="<li><span style='color:blue;'>You:</span> "+this.value+"</li>";
+
+			socket.emit('new msg', "'"+this.value+"'");
+			this.value="";
+			document.getElementById("msg").scrollTo(0, document.body.scrollHeight);
+
+		  }
+	});
+	document.getElementById("emojiSelecter").disabled="true";
+	document.getElementById("emojiSelecter").addEventListener("click", function(){
+	var emojiList=document.getElementById("drawer");
+		if (emojiList.classList.contains("hidden")){
+			emojiList.classList.remove("hidden")
+		}else{
+			emojiList.classList.add("hidden");
+		}
+	});
+
+	var emojis=document.getElementsByClassName("emoji");
+
+	for (i = 0; i < emojis.length; i++) {
+        emojis[i].addEventListener("click", function(){
+			console.log(this.firstElementChild.src);
+			var text= "<img src='"+this.firstElementChild.src+"' >"
+			document.getElementById("msgHistory").innerHTML+="<li><span style='color:blue;'>You:</span> "+text+"</li>";
+
+			socket.emit('new msg', text);
+			document.getElementById("drawer").classList.add("hidden");
+		})
+    }
+	
+	//document.getElementById("msg").scrollTo(0, this.scrollHeight);
+};

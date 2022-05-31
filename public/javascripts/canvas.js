@@ -32,16 +32,16 @@ function init() {
 			card: undefined
 		});
 	}
-	labels["logo"] = new Label({ x: 0.5, y: 0.3 }, "Digimon", 150, true, false, false, "PokemonSolid");
-	labels["play"] = new Label({ x: 0.5, y: 0.7 }, "Play!", 144, true, true, false, labelFont, enterQueue);
-	labels["searching"] = new Label({ x: 0.5, y: 0.7 }, "Searching   ", 144, false, false, false, labelFont);
-	labels["result"] = new Label({ x: 0.5, y: 0.3 }, "", 192, false, false, false, labelFont);
-	labels["rematch"] = new Label({ x: 0.5, y: 0.62 }, "Rematch", 128, false, false, false, labelFont, requestRematch);
-	labels["waiting"] = new Label({ x: 0.5, y: 0.62 }, "Waiting   ", 128, false, false, false, labelFont);
-	labels["main menu"] = new Label({ x: 0.5, y: 0.78 }, "Main Menu", 128, false, false, false, labelFont, exitMatch);
+	labels["logo"] = new Label({ x: 0.5, y: 0.3 }, "Digimon", 120, true, false, false, "Adelia");
+	labels["play"] = new Label({ x: 0.5, y: 0.7 }, "Play!", 120, true, true, false, labelFont, enterQueue);
+	labels["searching"] = new Label({ x: 0.5, y: 0.7 }, "Searching   ", 50, false, false, false, labelFont);
+	labels["result"] = new Label({ x: 0.5, y: 0.2 }, "", 100, false, false, false, labelFont);
+	labels["rematch"] = new Label({ x: 0.5, y: 0.62 }, "Rematch", 50, false, false, false, labelFont, requestRematch);
+	labels["waiting"] = new Label({ x: 0.5, y: 0.62 }, "Waiting   ", 50, false, false, false, labelFont);
+	labels["main menu"] = new Label({ x: 0.5, y: 0.75 }, "Main Menu", 50, false, false, false, labelFont, exitMatch);
 	labels["timer"] = new Label({ x: 0.5, y: 0.1 }, 20, 64, false, false, false, labelFont);
-	labels["yourhp"] = new Label({ x: 0.1, y: 0.1 },"Your hp: 20", 28, false, false, false, labelFont);
-	labels["opponenthp"] = new Label({ x: 0.7, y: 0.1 },"Enemy hp: 20", 28, false, false, false, labelFont);
+	labels["yourhp"] = new Label({ x: 0.1, y: 0.1 },"Your hp: 20", 20, false, false, false, labelFont);
+	labels["opponenthp"] = new Label({ x: 0.7, y: 0.1 },"Enemy hp: 20", 20, false, false, false, labelFont);
 }
 
 function animate() {
@@ -141,12 +141,12 @@ function isOnLabel(event, label) {
 
 function handleResize() {
 	if (window.innerWidth < window.innerHeight * aspect) {
-		canvas.width = window.innerWidth * 0.9;
-		canvas.height = window.innerWidth * 0.9 / aspect;
+		canvas.width = window.innerWidth * 0.7;
+		canvas.height = window.innerWidth * 0.8 / aspect;
 		r = canvas.width / 1000;
 	} else {
-		canvas.width = window.innerHeight * 0.9 * aspect;
-		canvas.height = window.innerHeight * 0.9;
+		canvas.width = window.innerHeight * 0.7 * aspect;
+		canvas.height = window.innerHeight * 0.8;
 		r = canvas.height * aspect / 1000;
 	}
 	cardWidth = 120 * r;
@@ -201,28 +201,6 @@ function drawCard(card, position, scale) {
 	cardToDraw.src = "./images/"+card.img;
 	
 	ctx.drawImage(cardToDraw, position.x, position.y,cardWidth, cardHeight);
-
-
-
-
-
-	/*if (!scale) {
-		scale = 1;
-	}
-	ctx.textBaseline = "middle";
-	ctx.textAlign = "center";
-	ctx.fillStyle = colors[card.color];
-	ctx.fillRect(position.x, position.y, cardWidth * scale, cardHeight * scale);
-	ctx.strokeStyle = "#000000";
-	ctx.lineWidth = 2 * scale * r;
-	ctx.strokeRect(position.x, position.y, cardWidth * scale, cardHeight * scale);
-	ctx.fillStyle = "#ffffff";
-	ctx.fillRect(position.x + cardWidth * scale * 0.1, position.y + cardHeight * scale * 0.067, cardWidth * scale * 0.8, cardHeight * scale * 0.866);
-	ctx.fillStyle = typeColors[card.type];
-	ctx.font = "bold " + (64 * scale * r) + "px chinese_takeaway";
-	ctx.fillText(card.power, position.x + cardWidth * scale / 2, position.y + cardHeight * scale * 0.4);
-	ctx.font = (32 * scale * r) + "px Arial";
-	ctx.fillText(types[card.type], position.x + cardWidth * scale / 2, position.y + cardHeight * scale * 0.7);*/
 }
 
 function drawPointCard(card, position, scale) {
@@ -331,7 +309,7 @@ var clickCursor = false,
 	displayCardSlots = false,
 	aspect = 16 / 10,
 	labels = [],
-	labelFont = "RagingRedLotusBB";
+	labelFont = "Adelia";
 
 	
 var typeColors = ["#FF8B26", "#1260E6", "#74D5F2"];
