@@ -53,7 +53,36 @@
 						</tr>
 					</thead>
 					<tbody>
+<<<<<<< Updated upstream
 
+=======
+						<% if(userData.length!=0){ var i=1; userData.forEach(function(data){ %>
+							<tr>
+								<td>
+									<%=i; %>
+								</td>
+								<td>
+									<%=data.fullName %>
+								</td>
+								<td>
+									<%=data.emailAddress %>
+								</td>
+								<td>
+									<%=data.city %>
+								</td>
+								<td>
+									<%=data.country %>
+								</td>
+								<td><a href="/users/edit/<%=data.id%>">Edit</a></td>
+								<td><a href="/users/delete/<%=data.id%>">Delete</a></td>
+							</tr>
+							<% i++; }) %>
+								<% } else{ %>
+									<tr>
+										<td colspan="7">No Data Found</td>
+									</tr>
+									<% } %>
+>>>>>>> Stashed changes
 					</tbody>
 				</table>
 			</div>

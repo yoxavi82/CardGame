@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mysql      = require('mysql');
-var mysql      = require('mysql');
+var mysql = require('mysql');
+var mysql = require('mysql');
 
 var bodyParser = require('body-parser');
 const { route } = require('express/lib/application');
@@ -17,42 +17,40 @@ var connection = mysql.createPool({
 
 //************************************************************************
 //************************************************************************
-router.post('/register',function(req,res){
-  console.log("req",req.body);
-  var users={
-    "username":req.body.username,
-    "password":req.body.password,
-    "email":req.body.email,
-    "wins":0
-  };
-  connection.query('INSERT INTO Users SET ?',users, function (error, results, fields) {
-  if (error) {
-    console.log("error ocurred",error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    });
-  }else{
-    console.log('The solution is: ', results);
-    res.send({
-      "code":200,
-      "success":"user registered sucessfully"
-        });
-  }
-  });
+router.post('/register', function (req, res) {
+	console.log("req", req.body);
+	var users = {
+		"username": req.body.username,
+		"password": req.body.password,
+		"email": req.body.email,
+		"wins": 0
+	};
+	connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
+		if (error) {
+			console.log("error ocurred", error);
+			res.send({
+				"code": 400,
+				"failed": "error ocurred"
+			});
+		} else {
+			console.log('The solution is: ', results);
+			res.send({
+				"code": 200,
+				"success": "user registered sucessfully"
+			});
+		}
+	});
 });
 
-
-
 // http://localhost:3000/auth
-router.post('/login', function(req, response) {
+router.post('/login', function (req, response) {
 	// Capture the input fields
 	let username = req.body.username;
 	let password = req.body.password;
 	// Ensure the input fields exists and are not empty
 	if (username && password) {
 		// Execute SQL query that'll select the account from the database based on the specified username and password
-		connection.query('SELECT * FROM Users WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+		connection.query('SELECT * FROM Users WHERE username = ? AND password = ?', [username, password], function (error, results, fields) {
 			// If there is an issue with the query, output the error
 			if (error) throw error;
 			// If the account exists
@@ -64,7 +62,7 @@ router.post('/login', function(req, response) {
 				response.redirect('/game.html');
 			} else {
 				response.send('Incorrect Username and/or Password!');
-			}			
+			}
 			response.end();
 		});
 	} else {
@@ -73,5 +71,14 @@ router.post('/login', function(req, response) {
 	}
 });
 
+//LEADERBOARD//
+router.post('/leaderboard', function (req, res, next) {
+	var table = 'SELECT username, wins FROM Users';
+	connection.query(table, function (err, data, fields) {
+		if (err) throw err;
+		res.render('leaderboard', { title: 'User List', userData: data });
+		console.log(data);
+	});
+});
 
 module.exports = router;

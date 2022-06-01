@@ -36,7 +36,7 @@ var register = require('./routes/connection');
 const bodyParser = require('body-parser')
 
 app.use(session({
-	secret: 'secret',
+	secret: 'ACSXCSsecret',
 	resave: true,
 	saveUninitialized: true
 }));
@@ -46,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 
 app.use('/', register);
+
 
 
 /*
