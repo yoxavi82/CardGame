@@ -6,9 +6,18 @@ var router = express.Router();
 var mysql = require("mysql");
 const session = require('express-session');
 var path = require('path');
+cookieParser = require('cookie-parser');
 
 
 var app = express();
+app.use(cookieParser());
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
+app.set('view engine', 'ejs');
 var http = require("http").Server(app);
 var io = require("./libs/game_manager").listen(http);  // Start Socket.io server and let game_manager handle those connections
 
@@ -17,7 +26,18 @@ app.use(express.static("public"));  // Staticly serve pages, using directory 'pu
 
 // User connects to server
 app.get("/", function (req, res) {
-	// Will serve static pages, no need to handle requests
+	res.render('pages/index')
+});
+
+app.get("/game", function (req, res) {
+  user="Guest";
+  if( req.session.username==""){
+user= req.session.username;
+  }
+  
+  console.log(user)
+ 
+	res.render('pages/game',{username:  user})
 });
 
 // If any page not handled already handled (ie. doesn't exists)
@@ -33,7 +53,8 @@ http.listen(app.get("port"), function () {
 
 var register = require('./routes/connection');
 
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { verify } = require("crypto");
 
 app.use(session({
 	secret: 'ACSXCSsecret',
@@ -46,6 +67,8 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 
 app.use('/', register);
+
+
 
 
 

@@ -3,6 +3,9 @@ var router = express.Router();
 var mysql = require('mysql');
 var mysql = require('mysql');
 
+
+var app = express();
+
 var bodyParser = require('body-parser');
 const { route } = require('express/lib/application');
 const { response } = require('express');
@@ -59,7 +62,8 @@ router.post('/login', function (req, response) {
 				req.session.loggedin = true;
 				req.session.username = username;
 				// Redirect to home page
-				response.redirect('/game.html');
+				console.log(req.session.username);
+				response.render('pages/game',{username:req.session.username});
 			} else {
 				response.send('Incorrect Username and/or Password!');
 			}
@@ -74,9 +78,11 @@ router.post('/login', function (req, response) {
 //LEADERBOARD//
 router.post('/leaderboard', function (req, res, next) {
 	var table = 'SELECT username, wins FROM Users';
+	console.log("server ok");
 	connection.query(table, function (err, data, fields) {
 		if (err) throw err;
-		res.render('leaderboard', { title: 'User List', userData: data });
+		//res.render('/leaderboard.html', { user: 'Xavi', wins: "124" });
+		res.redirect("/leaderboard.html",{user: 'Xavi', wins: "124"})
 		console.log(data);
 	});
 });
