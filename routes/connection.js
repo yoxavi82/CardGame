@@ -76,13 +76,13 @@ router.post('/login', function (req, response) {
 });
 
 //LEADERBOARD//
-router.post('/leaderboard', function (req, res, next) {
-	var table = 'SELECT username, wins FROM Users';
+router.get('/leaderboard', function (req, res, next) {
+	var table = 'SELECT username, wins FROM Users ORDER BY wins desc';
 	console.log("server ok");
 	connection.query(table, function (err, data, fields) {
 		if (err) throw err;
 		//res.render('/leaderboard.html', { user: 'Xavi', wins: "124" });
-		res.redirect("/leaderboard.html",{user: 'Xavi', wins: "124"})
+		res.render("pages/leaderboard",{listData:data})
 		console.log(data);
 	});
 });
