@@ -47,6 +47,24 @@ app.get("/logout", function (req, res) {
 
 });
 
+
+app.get('/leaderboard', function (req, res) {
+  var connection = mysql.createPool({
+    host: "37.59.55.185",
+    user: "7atd0OBZX2",
+    password: "lkxIEchd6U",
+    database: "7atd0OBZX2"
+  });
+  var table = 'SELECT username, email, wins FROM Users ORDER BY wins desc LIMIT 5';
+  console.log("server ok");
+  connection.query(table, function (err, data, fields) {
+    if (err) throw err;
+    //res.render('/leaderboard.html', { user: 'Xavi', wins: "124" });
+    res.render("pages/leaderboard", { listData: data })
+    console.log(data);
+  });
+})
+
 /*app.get("/session", function (req, res) {
   let user="Guest";
   console.log("user="+res.cookie.username);
