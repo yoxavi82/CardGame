@@ -251,6 +251,7 @@ function processRound(match, tied, winner, dif) {
 		io.to(match.matchId).emit("fight result", data);
 		if (checkForSet(loser)) {
 			endMatch(match, winner, "set");
+			
 		} else {
 			nextRound(match);
 		}

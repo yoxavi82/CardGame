@@ -26,16 +26,44 @@ app.use(express.static("public"));  // Staticly serve pages, using directory 'pu
 
 // User connects to server
 app.get("/", function (req, res) {
-	res.render('pages/index')
+  console.log(req.cookies);
+  var logged =false;
+  user = "Guest";
+  if(req.cookies.loggedin==="true"){
+    user = req.cookies.username;
+    logged=true;
+  }
+  console.log(user +"/"+ logged + "/"+ req.cookies.loggedin);
+	res.render('pages/index',{"username":  user, "logged": logged});
 });
 
-app.get("/game", function (req, res) {
-  user="Guest";
-  if( req.session.username==""){
+app.get("/logout", function (req, res) {
+  res.clearCookie("username");
+  res.clearCookie("logged");
+  res.cookie("loggedin", false);
+  res.render('pages/index',{"username":  "Guest", "logged": false});
+  res.redirect("/");
+
+});
+
+/*app.get("/session", function (req, res) {
+  let user="Guest";
+  console.log("user="+res.cookie.username);
+  if( req.session.username!=undefined){
 user= req.session.username;
   }
-  
-  console.log(user)
+	res.send({username:user});
+});
+*/
+
+
+app.get("/game", function (req, res) {
+  if(req.cookies.loggedin==="true")
+    user = req.cookies.username;
+  else
+    user= "Guest";
+
+    console.log(req.cookies.loggedin);
  
 	res.render('pages/game',{username:  user})
 });
@@ -67,92 +95,3 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 
 app.use('/', register);
-
-
-
-
-
-/*
-//SQL
-
-var connection = mysql.createConnection({
-	host: "37.59.55.185",
-	user: "7atd0OBZX2",
-	password: "lkxIEchd6U",
-	database: "7atd0OBZX2"
-});
-connection.connect(function(err){
-if(!err) {
-    console.log("Database is connected ... nn");
-} else {
-    console.log("Error connecting database ... nn");
-}
-});
-router.get('/register', function(req, res) {
-	res.render('index');
-  });
-
-//************************************************************************
-//************************************************************************
-router.post('/register',function(req,res){
-  console.log("req",req.body);
-  var users={
-    "username":req.body.username,
-    "password":req.body.password,
-    "email":req.body.email
-  };
-  connection.query('INSERT INTO Users SET ?',users, function (error, results, fields) {
-  if (error) {
-    console.log("error ocurred",error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    });
-  }else{
-    console.log('The solution is: ', results);
-    res.send({
-      "code":200,
-      "success":"user registered sucessfully"
-        });
-  }
-  });
-});
-
-
-
-router.post('/login',function(req,res){
-
-  var email= req.body.email;
-  var password = req.body.password;
-  connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
-  if (error) {
-    // console.log("error ocurred",error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    });
-  }else{
-    // console.log('The solution is: ', results);
-    if(results.length >0){
-      if(results[0].password == password){
-        res.send({
-          "code":200,
-          "success":"login sucessfull"
-            });
-      }
-      else{
-        res.send({
-          "code":204,
-          "success":"Email and password does not match"
-            });
-      }
-    }
-    else{
-      res.send({
-        "code":204,
-        "success":"Email does not exits"
-          });
-    }
-  }
-  });
-});*/

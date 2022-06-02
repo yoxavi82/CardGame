@@ -22,8 +22,9 @@ var connection = mysql.createPool({
 //************************************************************************
 router.post('/register', function (req, res) {
 	console.log("req", req.body);
+	username= req.body.username;
 	var users = {
-		"username": req.body.username,
+		"username":username ,
 		"password": req.body.password,
 		"email": req.body.email,
 		"wins": 0
@@ -37,6 +38,8 @@ router.post('/register', function (req, res) {
 			});
 		} else {
 			console.log('The solution is: ', results);
+			response.cookie("username", username );
+			response.cookie("loggedin", true );
 			res.send({
 				"code": 200,
 				"success": "user registered sucessfully"
@@ -58,12 +61,11 @@ router.post('/login', function (req, response) {
 			if (error) throw error;
 			// If the account exists
 			if (results.length > 0) {
-				// Authenticate the user
-				req.session.loggedin = true;
-				req.session.username = username;
 				// Redirect to home page
-				console.log(req.session.username);
-				response.render('pages/game',{username:req.session.username});
+				
+				response.cookie("username", username );
+				response.cookie("loggedin", true );
+				response.redirect('/game');
 			} else {
 				response.send('Incorrect Username and/or Password!');
 			}

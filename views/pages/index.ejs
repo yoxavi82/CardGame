@@ -16,6 +16,7 @@
     <script src="/javascripts/forms.js"></script>
     <style>
     </style>
+    
 </head>
 
 <body>
@@ -29,17 +30,23 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar-list-11">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#at-login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#at-signup">Register</a>
-                </li>
-                <li class="nav-item">
-                    <form id="login" class="navbar-form navbar-right" role="form" METHOD="POST" action="/leaderboard">
-                        <input type="submit" class="nav-link" href="">Leaderboard</a>
-                    </form>
-                </li>
+                <% if(logged){%>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout" >Logout (cambiar redirect)</a>
+                    </li>
+                <% } else{ %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#at-login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#at-signup">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <form id="login" class="navbar-form navbar-right" role="form" METHOD="POST" action="/leaderboard">
+                            <input type="submit" class="nav-link" href="">Leaderboard</a>
+                        </form>
+                    </li>
+                  <% } %>
             </ul>
         </div>
     </nav>
