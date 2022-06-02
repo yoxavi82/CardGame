@@ -38,36 +38,47 @@
 			</ul>
 		</div>
 	</nav>
-	<div class="table-data">
-		<h2>Leaderboard</h2>
-		<div class="row justify-content-center">
-			<div class="col-auto">
-				<table class="table table-bordered table-hover">
-					<thead class="thead-dark">
-						<tr>
-							<th>Username</th>
-							<th>Mail</th>
-							<th>Wins</th>
-						</tr>
-					</thead>
-					<tbody>
-						<% for(var i=0; i<listData.length; i++) {%>
-							<tr>
-								<td>
-									<%=listData[i].username %>
-								</td>
-								<td>
-									<%=listData[i].email %>
-								</td>
-								<td>
-									<%=listData[i].wins %>
-								</td>
-							</tr>
-							<% } %>
-					</tbody>
-				</table>
+	<div class="card mb-4">
+		<div class="card-body">
+			<!-- Grid row -->
+			<div class="row">
+				<!-- Grid column -->
+				<div class="col-md-12">
+					<h2 class="py-3 text-center font-bold font-up success-text">Leaderboard</h2>
+				</div>
+				<!-- Grid column -->
 			</div>
+			<!-- Grid row -->
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Position</th>
+						<th>Username</th>
+						<th>Mail</th>
+						<th>Wins</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% for(var i=0; i<listData.length; i++) {%>
+						<tr class="fila">
+							<td>
+								<%=[i +1]%>
+							</td>
+							<td>
+								<%=listData[i].username %>
+							</td>
+							<td>
+								<%=listData[i].email %>
+							</td>
+							<td>
+								<%=listData[i].wins %>
+							</td>
+						</tr>
+						<% } %>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </body>
+
 </html>
