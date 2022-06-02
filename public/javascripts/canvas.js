@@ -32,6 +32,24 @@ function init() {
 			card: undefined
 		});
 	}
+
+	$.ajax({
+		async: true,
+		type: "GET",
+		dataType: "JSON",
+		url: "/SESSION",
+		data: { "random": Math.random() },
+		success: resposta,
+		timeout: 4000,
+		error: problemes
+	   });
+	   function resposta(dades){
+		   //console.log(dades);
+	   }
+	   function problemes(){}
+
+
+
 	labels["logo"] = new Label({ x: 0.5, y: 0.3 }, "Digimon", 120, true, false, false, "Adelia");
 	labels["play"] = new Label({ x: 0.5, y: 0.7 }, "Play!", 120, true, true, false, labelFont, enterQueue);
 	labels["searching"] = new Label({ x: 0.5, y: 0.7 }, "Searching   ", 50, false, false, false, labelFont);
@@ -165,7 +183,6 @@ function handleResize() {
 
 //////////  Drawing  \\\\\\\\\\
 function draw() {
-	console.log("draw")
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	for (var i = 0; i < handSlots.length; i++) {
 		if (displayCardSlots) {
