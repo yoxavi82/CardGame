@@ -87,7 +87,6 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 app.use('/', register);
 
-console.log("hola");
 
 
 
