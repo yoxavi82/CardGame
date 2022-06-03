@@ -63,7 +63,27 @@ app.get('/leaderboard', function (req, res) {
     res.render("pages/leaderboard", { listData: data })
     console.log(data);
   });
-})
+});
+
+app.get('/win', function (req, res) {
+  var connection = mysql.createPool({
+    host: "37.59.55.185",
+    user: "7atd0OBZX2",
+    password: "lkxIEchd6U",
+    database: "7atd0OBZX2"
+  });
+
+  if(req.cookies.loggedin==="true")
+    user = req.cookies.username;
+  else
+    return;
+  var table = "UPDATE Users SET wins=wins+1 WHERE username='"+user+"'";
+  connection.query(table, function (err, data, fields) {
+    if (err) throw err;
+    //res.render('/leaderboard.html', { user: 'Xavi', wins: "124" });
+
+  });
+});
 
 /*app.get("/session", function (req, res) {
   let user="Guest";
@@ -109,7 +129,7 @@ app.get('/leaderboard', function (req, res) {
 
 // If any page not handled already handled (ie. doesn't exists)
 app.get("*", function (req, res) {
-  res.status(404).send("Error 404 - Page not found");
+  res.status(404).render("pages/404");
 });
 
 // Start http server

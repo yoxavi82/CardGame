@@ -11,14 +11,14 @@ var rematchRequests = [];
 const cards = getAllCards();
 //Populate Cards\\
 function getAllCards() {
-	deck = [];
-	for (var i = 1; i < 8; i++) {
+	deck = [{"attack":7,"img":"ez.png"},{"attack":3,"img":"happy.png"},{"attack":1,"img":"monaks.png"},{"attack":4,"img":"peepoglad.png"},{"attack":2,"img":"peeposhy.png"},{"attack":5,"img":"pepeclown.png"},{"attack":6,"img":"pepejam.png"},{"attack":8,"img":"poggers.png"},{"attack":5,"img":"wickd.png"}];
+	/*for (var i = 1; i < 8; i++) {
 		deck.push({
 			"id": i,
 			"attack": i,
-			"img": "card" + i + ".png"
+			"img": "ez.png"
 		});
-	}
+	}*/
 	console.log(deck);
 	return deck;
 };

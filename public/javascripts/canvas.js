@@ -215,7 +215,7 @@ function draw() {
 function drawCard(card, position, scale) {
 	cardToDraw = new Image();
 
-	cardToDraw.src = "./images/"+card.img;
+	cardToDraw.src = "./images/cards/"+card.img;
 	
 	ctx.drawImage(cardToDraw, position.x, position.y,cardWidth, cardHeight);
 }
