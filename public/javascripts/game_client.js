@@ -13,26 +13,26 @@ var opponentCard, playerCard, matchWinner, matchEndReason, readyToEnd, timerInte
 
 
 //////////  Socket Events  \\\\\\\\\\
-socket.on("enter match", function() {
+socket.on("enter match", function () {
 	enterMatch();
 });
 
-socket.on("update cards", function(cards) {
+socket.on("update cards", function (cards) {
 	updateCards(cards);
 });
 
-socket.on("unknown card played", function() {
+socket.on("unknown card played", function () {
 	unknownCardPlayed();
 });
-socket.on("opponent msg", function(text) {
+socket.on("opponent msg", function (text) {
 	opponentMsg(text);
 });
 
-socket.on("fight result", function(result) {
+socket.on("fight result", function (result) {
 	displayResult(result);
 });
 
-socket.on("end match", function(winner, reason) {
+socket.on("end match", function (winner, reason) {
 	matchWinner = winner;
 	matchEndReason = reason;
 	readyToEnd = true;
@@ -41,7 +41,7 @@ socket.on("end match", function(winner, reason) {
 	}
 });
 
-socket.on("no rematch", function() {
+socket.on("no rematch", function () {
 	if (labels["waiting"].visiblen || labels["rematch"].visible) {
 		labels["waiting"].visible = false;
 		labels["rematch"].disabled = true;
@@ -78,9 +78,9 @@ function enterMatch() {
 	resetDots(labels["searching"]);
 	labels["logo"].visible = false;
 	displayCardSlots = true;
-	document.getElementById("send").disabled= false;
-	document.getElementById("emojiSelecter").disabled=false;
-	document.getElementById("send").value= "";
+	document.getElementById("send").disabled = false;
+	document.getElementById("emojiSelecter").disabled = false;
+	document.getElementById("send").value = "";
 
 
 }
@@ -100,11 +100,11 @@ function playCard(index) {
 }
 
 function unknownCardPlayed() {
-	opponentCard = {isUnknown: true};
+	opponentCard = { isUnknown: true };
 }
 
-function opponentMsg(text){
-	document.getElementById("msgHistory").innerHTML+="<li>"+text+"</li>";
+function opponentMsg(text) {
+	document.getElementById("msgHistory").innerHTML += "<li>" + text + "</li>";
 	document.getElementById("msg").scrollTo(0, document.body.scrollHeight);
 
 }
@@ -123,11 +123,11 @@ function displayResult(result) {
 	opponentPoints = opponent.points;
 	opponentCard = opponent.card;
 	console.log("your points: " + playerPoints);
-	
+
 	console.log("opponent points: " + opponentPoints);
 
 	clearInterval(timerInterval);
-	setTimeout(function() {
+	setTimeout(function () {
 		if (readyToEnd) {
 			endMatch();
 		} else {
@@ -135,13 +135,27 @@ function displayResult(result) {
 			opponentCard = undefined;
 			playerCard = undefined;
 			labels["timer"].text = 20;
-			labels["yourhp"].text = "Your hp: "+playerPoints;
-			labels["opponenthp"].text = "Enemy hp: "+opponentPoints;
+			labels["yourhp"].text = "Your hp: " + playerPoints;
+			labels["opponenthp"].text = "Enemy hp: " + opponentPoints;
 			timerInterval = setInterval(updateTimer, 1000);
 			canPlayCard = true;
 			socket.emit("request cards update");
 		}
 	}, (2 * 1000));
+}
+function youWin() {
+	$.ajax({
+		async: true,
+		type: "GET",
+		dataType: "html",
+		url: "/win",
+		data: { "random": Math.random() },
+		success: resposta,
+		timeout: 4000,
+	});
+	function resposta(dades) {
+		$("#resultat").html(dades);
+	}
 }
 
 function endMatch() {
@@ -150,6 +164,7 @@ function endMatch() {
 	opponentCard = undefined;
 	playerCard = undefined;
 	displayCardSlots = false;
+	if(socket.id === matchWinner) youWin();
 	for (var i = 0; i < handSlots.length; i++) {
 		handSlots[i].card = undefined;
 	}
@@ -158,6 +173,7 @@ function endMatch() {
 		var reason = ["Your opponent", "You"][+(socket.id !== matchWinner)] + " left the match";
 		labels["rematch"].disabled = true;
 		labels["rematch"].clickable = false;
+
 	} else {
 		var reason = ["Your opponent has", "You have"][+(socket.id === matchWinner)] + " a full set";
 		labels["rematch"].clickable = true;
@@ -178,10 +194,10 @@ function endMatch() {
 	matchWinner = undefined;
 	matchEndReason = undefined;
 
-	document.getElementById("send").disabled= true;
-	document.getElementById("emojiSelecter").disabled=true;
+	document.getElementById("send").disabled = true;
+	document.getElementById("emojiSelecter").disabled = true;
 	document.getElementById("drawer").classList.add("hidden");
-	document.getElementById("send").value= "To start chatting join a game";
+	document.getElementById("send").value = "To start chatting join a game";
 
 
 }
@@ -238,45 +254,45 @@ function updateTimer() {
 }
 
 window.onload = function () {
-	document.getElementById("send").disabled= true;
-	document.getElementById("send").value= "To start chatting join a game";
+	document.getElementById("send").disabled = true;
+	document.getElementById("send").value = "To start chatting join a game";
 	document.getElementById("drawer").classList.add("hidden");
-	document.getElementById("send").addEventListener("keypress",function(event){
+	document.getElementById("send").addEventListener("keypress", function (event) {
 		if (event.key === "Enter") {
 			// Cancel the default action, if needed
 			event.preventDefault();
 			// Trigger the button element with a click
 			console.log(this.value);
-			document.getElementById("msgHistory").innerHTML+="<li><span style='color:blue;'>You:</span> "+this.value+"</li>";
+			document.getElementById("msgHistory").innerHTML += "<li><span style='color:blue;'>You:</span> " + this.value + "</li>";
 
-			socket.emit('new msg', "'"+this.value+"'");
-			this.value="";
+			socket.emit('new msg', "'" + this.value + "'");
+			this.value = "";
 			document.getElementById("msg").scrollTo(0, document.body.scrollHeight);
 
-		  }
+		}
 	});
-	document.getElementById("emojiSelecter").disabled="true";
-	document.getElementById("emojiSelecter").addEventListener("click", function(){
-	var emojiList=document.getElementById("drawer");
-		if (emojiList.classList.contains("hidden")){
+	document.getElementById("emojiSelecter").disabled = "true";
+	document.getElementById("emojiSelecter").addEventListener("click", function () {
+		var emojiList = document.getElementById("drawer");
+		if (emojiList.classList.contains("hidden")) {
 			emojiList.classList.remove("hidden")
-		}else{
+		} else {
 			emojiList.classList.add("hidden");
 		}
 	});
 
-	var emojis=document.getElementsByClassName("emoji");
+	var emojis = document.getElementsByClassName("emoji");
 
 	for (i = 0; i < emojis.length; i++) {
-        emojis[i].addEventListener("click", function(){
+		emojis[i].addEventListener("click", function () {
 			console.log(this.firstElementChild.src);
-			var text= "<img src='"+this.firstElementChild.src+"' >"
-			document.getElementById("msgHistory").innerHTML+="<li><span style='color:blue;'>You:</span> "+text+"</li>";
+			var text = "<img src='" + this.firstElementChild.src + "' >"
+			document.getElementById("msgHistory").innerHTML += "<li><span style='color:blue;'>You:</span> " + text + "</li>";
 
 			socket.emit('new msg', text);
 			document.getElementById("drawer").classList.add("hidden");
 		})
-    }
-	
+	}
+
 	//document.getElementById("msg").scrollTo(0, this.scrollHeight);
 };

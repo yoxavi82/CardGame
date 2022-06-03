@@ -88,5 +88,4 @@ router.get('/leaderboard', function (req, res, next) {
 		console.log(data);
 	});
 });
-
 module.exports = router;
