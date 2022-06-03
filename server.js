@@ -129,7 +129,7 @@ app.get('/leaderboard', function (req, res) {
 
 // If any page not handled already handled (ie. doesn't exists)
 app.get("*", function (req, res) {
-  res.status(404).send("Error 404 - Page not found");
+  res.status(404).render("pages/404");
 });
 
 // Start http server

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var mysql = require('mysql');
-
+const bcrypt = require('bcrypt');
 
 var app = express();
 
@@ -21,56 +21,73 @@ var connection = mysql.createPool({
 //************************************************************************
 //************************************************************************
 router.post('/register', function (req, res) {
-	console.log("req", req.body);
+	console.log("req-----------------", req.body);
 	username= req.body.username;
-	var users = {
-		"username":username ,
-		"password": req.body.password,
-		"email": req.body.email,
-		"wins": 0
-	};
-	connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
-		if (error) {
-			console.log("error ocurred", error);
-			res.send({
-				"code": 400,
-				"failed": "error ocurred"
-			});
-		} else {
-			console.log('The solution is: ', results);
-			response.cookie("username", username );
-			response.cookie("loggedin", true );
-			res.send({
-				"code": 200,
-				"success": "user registered sucessfully"
-			});
-		}
+	password="";
+	bcrypt.hash(req.body.password, 12).then(hash => {
+		var users = {
+			"username":username ,
+			"password": hash,
+			"email": req.body.email,
+			"wins": 0
+		};
+		connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
+			if (error) {
+				console.log("error ocurred", error);
+				res.send({
+					"code": 400,
+					"failed": "error ocurred"
+				});
+			} else {
+				console.log('The solution is: ', results);
+				res.cookie("username", username );
+				res.cookie("loggedin", true );
+				res.redirect("/game");
+			}
+		});
 	});
+	
 });
 
 // http://localhost:3000/auth
 router.post('/login', function (req, response) {
+		// Ensure the input fields exists and are not empty
+	if (req.body.username && req.body.password) {
 	// Capture the input fields
 	let username = req.body.username;
-	let password = req.body.password;
-	// Ensure the input fields exists and are not empty
-	if (username && password) {
-		// Execute SQL query that'll select the account from the database based on the specified username and password
-		connection.query('SELECT * FROM Users WHERE username = ? AND password = ?', [username, password], function (error, results, fields) {
-			// If there is an issue with the query, output the error
-			if (error) throw error;
-			// If the account exists
-			if (results.length > 0) {
-				// Redirect to home page
+	let password =  req.body.password;
+	
+	
+			// Execute SQL query that'll select the account from the database based on the specified username and password
+			connection.query('SELECT * FROM Users WHERE username = ? ', [username], async  function (error, results, fields) {
+				if (results.length > 0) {
+					const isSame = await bcrypt.compare(password,results[0].password) 
+				// If there is an issue with the query, output the error
+				console.log(results[0].password+"<-----------------------------");
+				console.log(isSame);
+
+				if (isSame) {
+					response.cookie("username", username );
+					response.cookie("loggedin", true );
+					response.redirect('/game');
+				 } else {
+					 //pass don't match
+					response.send('Incorrect Username and/or Password!');
+				 }
+				if (error) throw error;
+				}else{
+					//user don't exist
+				}
+
+					
+					
 				
-				response.cookie("username", username );
-				response.cookie("loggedin", true );
-				response.redirect('/game');
-			} else {
-				response.send('Incorrect Username and/or Password!');
-			}
-			response.end();
-		});
+				response.end();
+			});
+
+
+
+
 	} else {
 		response.send('Please enter Username and Password!');
 		response.end();
