@@ -13,9 +13,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link type="text/css" rel="stylesheet" href="./css/styles.css" />
-    <script src="/javascripts/forms.js"></script>
-    <style>
-    </style>
+    <script src="/javascripts/script.js"></script>
+    
     
 </head>
 
@@ -32,7 +31,7 @@
             <ul class="navbar-nav ml-auto index">
                 <% if(logged){%>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout" >Logout (cambiar redirect)</a>
+                        <a class="nav-link" href="/logout" >Logout</a>
                     </li>
                 <% } else{ %>
                     <li class="nav-item">
@@ -80,6 +79,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="errorlogin"></div>
                         <div class="form-group">
                             <label class="sr-only" for="username">Username</label>
                             <input type="username" class="form-control input-sm" placeholder="Username" id="username"
@@ -113,6 +113,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="errorregister"></div>
                         <div class="form-group">
                             <label class="sr-only" for="username">Username</label>
                             <input id="username" type="text" class="form-control" name="username" value=""

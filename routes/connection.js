@@ -21,76 +21,73 @@ var connection = mysql.createPool({
 //************************************************************************
 //************************************************************************
 router.post('/register', function (req, res) {
-	console.log("req-----------------", req.body);
-	username= req.body.username;
-	password="";
-	bcrypt.hash(req.body.password, 12).then(hash => {
-		var users = {
-			"username":username ,
-			"password": hash,
-			"email": req.body.email,
-			"wins": 0
-		};
-		connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
-			if (error) {
-				console.log("error ocurred", error);
-				res.send({
-					"code": 400,
-					"failed": "error ocurred"
-				});
-			} else {
-				console.log('The solution is: ', results);
-				res.cookie("username", username );
-				res.cookie("loggedin", true );
-				res.redirect("/game");
-			}
+
+	if (req.body.username && req.body.password && req.body.email) {
+		username = req.body.username;
+		password = "";
+		bcrypt.hash(req.body.password, 12).then(hash => {
+			var users = {
+				"username": username,
+				"password": hash,
+				"email": req.body.email,
+				"wins": 0
+			};
+			connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
+				if (error) {
+					res.redirect("/?register=user_exist")
+				} else {
+					console.log('The solution is: ', results);
+					res.cookie("username", username);
+					res.cookie("loggedin", true);
+					res.redirect("/game");
+				}
+			});
 		});
-	});
-	
+	}else{
+		res.redirect("/?register=empty_field");
+	}
+
 });
 
 // http://localhost:3000/auth
 router.post('/login', function (req, response) {
-		// Ensure the input fields exists and are not empty
+	// Ensure the input fields exists and are not empty
 	if (req.body.username && req.body.password) {
-	// Capture the input fields
-	let username = req.body.username;
-	let password =  req.body.password;
-	
-	
-			// Execute SQL query that'll select the account from the database based on the specified username and password
-			connection.query('SELECT * FROM Users WHERE username = ? ', [username], async  function (error, results, fields) {
-				if (results.length > 0) {
-					const isSame = await bcrypt.compare(password,results[0].password) 
-				// If there is an issue with the query, output the error
-				console.log(results[0].password+"<-----------------------------");
-				console.log(isSame);
+		// Capture the input fields
+		let username = req.body.username;
+		let password = req.body.password;
+
+
+		// Execute SQL query that'll select the account from the database based on the specified username and password
+		connection.query('SELECT * FROM Users WHERE username = ? ', [username], async function (error, results, fields) {
+			if (results.length > 0) {
+				const isSame = await bcrypt.compare(password, results[0].password)
+
 
 				if (isSame) {
-					response.cookie("username", username );
-					response.cookie("loggedin", true );
+					response.cookie("username", username);
+					response.cookie("loggedin", true);
 					response.redirect('/game');
-				 } else {
-					 //pass don't match
-					response.send('Incorrect Username and/or Password!');
-				 }
-				if (error) throw error;
-				}else{
-					//user don't exist
+				} else {
+					//pass don't match
+					response.redirect("/?login=user_not_found");
 				}
+				if (error) throw error;
+			} else {
+				response.redirect("/?login=user_not_found");
+			}
 
-					
-					
-				
-				response.end();
-			});
+
+
+
+			response.end();
+		});
 
 
 
 
 	} else {
-		response.send('Please enter Username and Password!');
-		response.end();
+		response.redirect("/?login=empty_field");
 	}
 });
 
@@ -101,7 +98,7 @@ router.get('/leaderboard', function (req, res, next) {
 	connection.query(table, function (err, data, fields) {
 		if (err) throw err;
 		//res.render('/leaderboard.html', { user: 'Xavi', wins: "124" });
-		res.render("pages/leaderboard",{listData:data})
+		res.render("pages/leaderboard", { listData: data })
 		console.log(data);
 	});
 });
