@@ -44,7 +44,7 @@ function init() {
 		error: problemes
 	   });
 	   function resposta(dades){
-		   //console.log(dades);
+
 	   }
 	   function problemes(){}
 

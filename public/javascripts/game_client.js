@@ -122,9 +122,7 @@ function displayResult(result) {
 	playerPoints = player.points;
 	opponentPoints = opponent.points;
 	opponentCard = opponent.card;
-	console.log("your points: " + playerPoints);
 
-	console.log("opponent points: " + opponentPoints);
 
 	clearInterval(timerInterval);
 	setTimeout(function () {
@@ -262,7 +260,7 @@ window.onload = function () {
 			// Cancel the default action, if needed
 			event.preventDefault();
 			// Trigger the button element with a click
-			console.log(this.value);
+
 			document.getElementById("msgHistory").innerHTML += "<li><span style='color:blue;'>You:</span> " + this.value + "</li>";
 
 			socket.emit('new msg', "'" + this.value + "'");
@@ -285,7 +283,6 @@ window.onload = function () {
 
 	for (i = 0; i < emojis.length; i++) {
 		emojis[i].addEventListener("click", function () {
-			console.log(this.firstElementChild.src);
 			var text = "<img src='" + this.firstElementChild.src + "' >"
 			document.getElementById("msgHistory").innerHTML += "<li><span style='color:blue;'>You:</span> " + text + "</li>";
 
