@@ -1,12 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
-var mysql = require('mysql');
 const bcrypt = require('bcrypt');
 
-var app = express();
-
-var bodyParser = require('body-parser');
 const { route } = require('express/lib/application');
 const { response } = require('express');
 
@@ -36,7 +32,7 @@ router.post('/register', function (req, res) {
 				if (error) {
 					res.redirect("/?register=user_exist")
 				} else {
-					console.log('The solution is: ', results);
+
 					res.cookie("username", username);
 					res.cookie("loggedin", true);
 					res.redirect("/game");
@@ -94,12 +90,9 @@ router.post('/login', function (req, response) {
 //LEADERBOARD//
 router.get('/leaderboard', function (req, res, next) {
 	var table = 'SELECT username, wins FROM Users ORDER BY wins desc';
-	console.log("server ok");
 	connection.query(table, function (err, data, fields) {
 		if (err) throw err;
-		//res.render('/leaderboard.html', { user: 'Xavi', wins: "124" });
-		res.render("pages/leaderboard", { listData: data })
-		console.log(data);
+		res.render("pages/leaderboard", { listData: data });
 	});
 });
 module.exports = router;

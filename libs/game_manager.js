@@ -12,14 +12,6 @@ const cards = getAllCards();
 //Populate Cards\\
 function getAllCards() {
 	deck = [{"attack":7,"img":"ez.png"},{"attack":3,"img":"happy.png"},{"attack":1,"img":"monaks.png"},{"attack":4,"img":"peepoglad.png"},{"attack":2,"img":"peeposhy.png"},{"attack":5,"img":"pepeclown.png"},{"attack":6,"img":"pepejam.png"},{"attack":8,"img":"poggers.png"},{"attack":5,"img":"wickd.png"}];
-	/*for (var i = 1; i < 8; i++) {
-		deck.push({
-			"id": i,
-			"attack": i,
-			"img": "ez.png"
-		});
-	}*/
-	console.log(deck);
 	return deck;
 };
 
@@ -46,7 +38,6 @@ module.exports.listen = function (app) {
 		});
 		socket.on("new msg", function (text) {
 			newMessage(socket,text);
-			console.log("llega1");
 		});
 
 		socket.on("leave queue", function () {
@@ -183,7 +174,6 @@ function playCard(socket, index) {
 	if (match) {
 		var player = match.players[match.players[0].socket.id === socket.id ? 0 : 1];
 		if (!player.cur) {
-			console.log(index)
 			if (index >= 0 && index <= 4) {
 				if (player.cards[index] !== undefined) {
 					player.cur = player.cards[index];
@@ -219,8 +209,7 @@ function processRound(match, tied, winner, dif) {
 
 	if (!tied) {
 		if (dif < 0) dif = dif * -1;
-		console.log(loser.points);
-		console.log(dif);
+
 		
 		loser.points -= dif;
 
@@ -230,9 +219,7 @@ function processRound(match, tied, winner, dif) {
 		loser= match.players[1];
 	}
 
-	console.log(winner.points);
 
-	console.log(loser.points);
 
 
 
