@@ -50,7 +50,7 @@ function init() {
 
 
 
-	labels["logo"] = new Label({ x: 0.5, y: 0.3 }, "Digimon", 120, true, false, false, "Adelia");
+	labels["logo"] = new Label({ x: 0.5, y: 0.3 }, "PepeDeck", 120, true, false, false, "Adelia");
 	labels["play"] = new Label({ x: 0.5, y: 0.7 }, "Play!", 120, true, true, false, labelFont, enterQueue);
 	labels["searching"] = new Label({ x: 0.5, y: 0.7 }, "Searching   ", 50, false, false, false, labelFont);
 	labels["result"] = new Label({ x: 0.5, y: 0.2 }, "", 100, false, false, false, labelFont);
