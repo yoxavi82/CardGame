@@ -1,5 +1,5 @@
-// This file starts the both the Express server, used to serve the actual webpage,
-// and the Socket.io server, used to handle the the realtime connection to the client.
+// Imports
+
 
 var express = require("express");
 var router = express.Router();
@@ -8,23 +8,37 @@ const session = require('express-session');
 var path = require('path');
 cookieParser = require('cookie-parser');
 
-
+//se define express como app
 var app = express();
+
+//indicamos que al app va a tener cookies que usaremos mas adelante para guardar la sesion del usuario loggeado
 app.use(cookieParser());
 
+//definimos la sesion para guardarla luego en las cookies
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true
 }))
+
+//establecemos ejs como motor de las vistas
 app.set('view engine', 'ejs');
+
+// Manejamos http y definimos que  el archivo “game_manager” va a ser el que escuche las peticiones http que en nuestro caso serán las llamadas de nuestro socket .
+
+
 var http = require("http").Server(app);
-var io = require("./libs/game_manager").listen(http);  // Start Socket.io server and let game_manager handle those connections
+var io = require("./libs/game_manager").listen(http); 
 
-app.set("port", (process.env.PORT || 3001));  // Use either given port or 3001 as default
-app.use(express.static("public"));  // Staticly serve pages, using directory 'public' as root 
+//Definimos el puerto 3001 
+app.set("port", (process.env.PORT || 3001));
 
-// User connects to server
+//Definimos el directorio "public" como raiz
+app.use(express.static("public"));  
+
+
+// cuando vas a la raiz redirigimos a la vista login y si ya has iniciado sesion enviamos la variable "logged" como true para mostrar la opción de logout 
+// por lo contrario enviamos false si no se ha iniciado sesión para mostrar las opciones login y register
 app.get("/", function (req, res) {
 
   var logged = false;
@@ -36,6 +50,7 @@ app.get("/", function (req, res) {
   res.render('pages/index', { "username": user, "logged": logged });
 });
 
+//cuando se recibe la llamada a “/logout” se borran todas cookies para poder volver a iniciar sesión. 
 app.get("/logout", function (req, res) {
   res.clearCookie("username");
   res.clearCookie("logged");
@@ -45,6 +60,8 @@ app.get("/logout", function (req, res) {
 
 });
 
+//Cuando se recibe la llamada a “/leaderboard” se busca en la base de datos los 5 usuarios con más victorias 
+//para mandarlo como parámetro al redireccionar a la vista leaderboard.
 
 app.get('/leaderboard', function (req, res) {
   var connection = mysql.createPool({
@@ -65,6 +82,7 @@ app.get('/leaderboard', function (req, res) {
   });
 });
 
+//Cuando se recibe la llamada a “/win” se busca en la base de datos el usuario que está iniciado para añadirle una victoria.
 app.get('/win', function (req, res) {
   var connection = mysql.createPool({
     host: "37.59.55.185",
@@ -86,6 +104,7 @@ app.get('/win', function (req, res) {
 
 
 
+//Cuando se recibe la llamada a “/game” se busca en las cookies el usuario iniciado para mandarlo como parámetro con el redirect a la vista “game”.
 
 app.get("/game", function (req, res) {
   if (req.cookies.loggedin === "true")
@@ -100,24 +119,7 @@ app.get("/game", function (req, res) {
 });
 
 
-
-app.get('/leaderboard', function (req, res) {
-  var connection = mysql.createPool({
-    host: "37.59.55.185",
-    user: "7atd0OBZX2",
-    password: "lkxIEchd6U",
-    database: "7atd0OBZX2"
-  });
-  var table = 'SELECT username, email, wins FROM Users ORDER BY wins desc LIMIT 5';
-  connection.query(table, function (err, data, fields) {
-    if (err) throw err;
-
-    res.render("pages/leaderboard", { listData: data })
-
-  });
-})
-
-// If any page not handled already handled (ie. doesn't exists)
+//Cuando se recibe la llamada a cualquier otra ruta que no sea las definidas anteriormente te llevará a la página 404
 app.get("*", function (req, res) {
   res.status(404).render("pages/404");
 });

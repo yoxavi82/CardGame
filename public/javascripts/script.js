@@ -1,6 +1,42 @@
 $(document).ready(function () {
     var url = window.location.search;
     var queryStr = url.split("?")[1];
+    document.getElementById("registerbutton").addEventListener("click",function(event){
+        event.preventDefault();
+        var error="";
+        var ok = true;
+        var user = $("#register #username");
+        if (user.val().length<5 ||user.val().length >12){
+        ok=false;
+        error+="Username must be between 5 and 12 characters long \n";
+        user.css("border-color","red");
+        } else{
+            user.css("border-color","");
+        };
+        var email = $("#register #email");
+        if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.val()))){
+            ok=false;
+            error+="Email format is not valid \n";
+            email.css("border-color","red");
+        }else{
+            email.css("border-color","");
+
+        }
+        
+        var pass =$("#register #password");
+        var check=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+if(!pass.val().match(check)) {
+error+= "Password must have between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter";
+ok=false
+pass.css("border-color","red");
+} else{
+    pass.css("border-color","");
+
+}
+
+        if(!ok) alert(error)
+        else document.getElementById("register").submit();
+    });
 
     if (queryStr) {
         let hash = queryStr.split('&');

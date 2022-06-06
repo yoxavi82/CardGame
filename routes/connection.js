@@ -57,7 +57,7 @@ router.post('/login', function (req, response) {
 		// Execute SQL query that'll select the account from the database based on the specified username and password
 		connection.query('SELECT * FROM Users WHERE username = ? ', [username], async function (error, results, fields) {
 			if (results.length > 0) {
-				const isSame = await bcrypt.compare(password, results[0].password)
+				const isSame = await bcrypt.compare(password, results[0].password);
 
 
 				if (isSame) {
@@ -78,8 +78,6 @@ router.post('/login', function (req, response) {
 
 			response.end();
 		});
-
-
 
 
 	} else {

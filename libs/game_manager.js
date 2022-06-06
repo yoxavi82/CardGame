@@ -21,6 +21,7 @@ var timerDuration = 22;
 updateTimers();
 
 //////////  Socket.io  \\\\\\\\\\
+// Cuando el servidor recibe una llamada por socket lo reenvía al rival en tu partida.
 module.exports.listen = function (app) {
 	io = socketio.listen(app);
 	io.on("connection", function (socket) {
@@ -203,6 +204,7 @@ function fightCards(match) {
 	processRound(match, c0.attack=== c1.attack, match.players[c0.attack > c1.attack ? 0 : 1], c0.attack - c1.attack);
 
 }
+
 function processRound(match, tied, winner, dif) {
 
 	var loser = match.players[match.players[0] !== winner ? 0 : 1];
@@ -297,7 +299,6 @@ function generateDeck() {
 	deck = cards.sort(() => 0.5 - Math.random());
 
 
-	// Get sub-array of first n elements after shuffled
 	return deck;
 
 }

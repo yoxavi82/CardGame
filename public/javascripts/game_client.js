@@ -109,6 +109,7 @@ function opponentMsg(text) {
 
 }
 
+//En este método se recibe como parametro result que proviene del método processRound() de game_manager y dependiendo si el socket del ganador es igual al tuyo o no te muestra la clásica pantalla de “you win” o “you lose” si esta ha sido la ronda con la que uno de los dos ha ganado, en caso contrario se sigue a la siguiente ronda reiniciando el tiempo y actualizando las vidas.
 function displayResult(result) {
 	var player = undefined;
 	var opponent = undefined;
@@ -155,6 +156,10 @@ function youWin() {
 		$("#resultat").html(dades);
 	}
 }
+
+//En caso que uno de los dos jugadores pierda todas sus vidas se acabara el juego, y el jugador ganador llama al método youWin() que le sumara una victoria a la base de datos y se mostrara la clásica pantalla de “you win” o “you lose” dependiendo si has ganado o perdido, respectivamente, junto con una opción de rematch y la opción de main menu.
+//También se desactiva el chat hasta que vuelvas a unirte a otra partida.
+//En caso de que la partida acabe porque uno de los dos jugadores ha abandonado se desactiva la opción de rematch.
 
 function endMatch() {
 	canPlayCard = false;
@@ -263,7 +268,7 @@ window.onload = function () {
 
 			document.getElementById("msgHistory").innerHTML += "<li><span style='color:blue;'>You:</span> " + this.value + "</li>";
 
-			socket.emit('new msg', "'" + this.value + "'");
+			socket.emit('new msg', "" + this.value + "");
 			this.value = "";
 			document.getElementById("msg").scrollTo(0, document.body.scrollHeight);
 
